@@ -61,7 +61,7 @@ def get_alpha_vantage_ticker_for_row(row: pd.Series) -> str:
     if not row['is_available_on_alpha_vantage']:
         return SYMBOL_NOT_FOUND
 
-    bloomberg_ticker = row['bloomberg_ticker']
+    bloomberg_ticker = row['bloomberg']
     ticker = row['ticker']
 
     suffix = get_alpha_vantage_suffix_for_bloomberg_ticker(bloomberg_ticker)
@@ -102,16 +102,17 @@ def main():
     print(f'Tickers in public numerai mapping: {len(public_ticker_map)}')
     print(f'Total number of unique bloomberg tickers: {len(unique_bloomberg_tickers)}')
 
-    ticker_map = pd.DataFrame({'bloomberg_ticker': unique_bloomberg_tickers, 'alpha_vantage': None})
-    ticker_map['ticker'] = ticker_map.bloomberg_ticker.str[:-3]
-    ticker_map['is_available_on_alpha_vantage'] = ticker_map.bloomberg_ticker.apply(is_available_on_alpha_vantage)
+    ticker_map = pd.DataFrame({'bloomberg': unique_bloomberg_tickers, 'alpha_vantage': None})
+    ticker_map['ticker'] = ticker_map.bloomberg.str[:-3]
+    ticker_map['is_available_on_alpha_vantage'] = ticker_map.bloomberg.apply(is_available_on_alpha_vantage)
     ticker_map['alpha_vantage'] = ticker_map.apply(get_alpha_vantage_ticker_for_row, axis=1)
     ticker_map.drop(['ticker', 'is_available_on_alpha_vantage'], axis=1, inplace=True)
 
-    ticker_map = ticker_map.merge(public_ticker_map, how='left', on='bloomberg_ticker')
+    ticker_map = ticker_map.merge(public_ticker_map, how='left', left_on='bloomberg', right_on='bloomberg_ticker')
     ticker_map.yahoo.fillna(SYMBOL_NOT_FOUND, inplace=True)
     print_ticker_map_stats(ticker_map)
-    ticker_map.to_csv(TICKER_MAP_FNAME, index=False)
+    ticker_map.sort_values('bloomberg', inplace=True)
+    ticker_map.to_csv(TICKER_MAP_FNAME, index=False, columns=['bloomberg', 'yahoo', 'alpha_vantage'])
     print(f'done - saved tickers to file {TICKER_MAP_FNAME}')
 
 
