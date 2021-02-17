@@ -1,4 +1,3 @@
 numerapi
 tqdm
 pandas
-alpha_vantage
