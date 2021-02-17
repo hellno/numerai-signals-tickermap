@@ -31,7 +31,9 @@ The original mapping was started by jparyani and wsouza.
 thanks to meme dealer: hone5com
 
 ### ToDo
-- add more scripts for more ticker formats
+- add script to validate / add yahoo tickers
+- compare existing ticker_map.csv and weekly Numerai Signal to check if scripts need to run
+- add more scripts for more APIs
 - ...
 
 ## Ticker symbol formats
