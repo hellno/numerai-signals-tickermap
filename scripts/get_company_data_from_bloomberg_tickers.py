@@ -20,10 +20,7 @@ python package requirements:
 
 
 """
-
 import pandas as pd
-
-ticker_map = pd.read_csv('https://raw.githubusercontent.com/hellno/numerai-signals-tickermap/main/ticker_map.csv')
 
 import time
 from collections import Counter
@@ -44,6 +41,7 @@ N_JOBS = 1
 
 USE_HEADLESS_BROWSER = True
 
+NUMERAI_TICKER_MAP_URL = 'https://raw.githubusercontent.com/hellno/numerai-signals-tickermap/main/ticker_map.csv'
 ROBOT_SCRAPE_WARNING = 'Are you a robot?'
 SCRAPE_BLOCKED_FLAG = 'SCRAPE_BLOCKED'
 
@@ -133,6 +131,8 @@ def get_company_data_from_ticker(ticker: str, with_sleep: bool = True) -> Dict[s
 
     return company_data
 
+
+ticker_map = pd.read_csv()
 
 output_file_exists = os.path.exists(TICKER_TABLE_OUTPUT_FILENAME)
 if output_file_exists:
